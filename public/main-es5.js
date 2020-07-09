@@ -70,23 +70,34 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     var routes = [{
       path: '',
       loadChildren: function loadChildren() {
-        return __webpack_require__.e(
+        return Promise.all(
         /*! import() | web-web-module */
-        "web-web-module").then(__webpack_require__.bind(null,
+        [__webpack_require__.e("default~admin-admin-module~web-web-module"), __webpack_require__.e("web-web-module")]).then(__webpack_require__.bind(null,
         /*! ./web/web.module */
         "./src/app/web/web.module.ts")).then(function (m) {
           return m.WebModule;
         });
       }
     }, {
-      path: 'admin',
+      path: 'bigcooladminexpert',
       loadChildren: function loadChildren() {
-        return __webpack_require__.e(
+        return Promise.all(
         /*! import() | admin-admin-module */
-        "admin-admin-module").then(__webpack_require__.bind(null,
+        [__webpack_require__.e("default~admin-admin-module~web-web-module"), __webpack_require__.e("admin-admin-module")]).then(__webpack_require__.bind(null,
         /*! ./admin/admin.module */
         "./src/app/admin/admin.module.ts")).then(function (m) {
           return m.AdminModule;
+        });
+      }
+    }, {
+      path: '**',
+      loadChildren: function loadChildren() {
+        return Promise.all(
+        /*! import() | web-web-module */
+        [__webpack_require__.e("default~admin-admin-module~web-web-module"), __webpack_require__.e("web-web-module")]).then(__webpack_require__.bind(null,
+        /*! ./web/web.module */
+        "./src/app/web/web.module.ts")).then(function (m) {
+          return m.WebModule;
         });
       }
     }];
@@ -345,7 +356,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         _classCallCheck(this, ContactService);
 
         this.$http = $http;
-        this.queryApi = '/api/url';
+        this.queryApi = '/api/query';
       }
 
       _createClass(ContactService, [{
@@ -361,7 +372,26 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       }, {
         key: "addQuery",
         value: function addQuery(query) {
-          return this.$http.post(this.queryApi, query);
+          return this.$http.post(this.queryApi, query, {
+            observe: 'response'
+          });
+        }
+      }, {
+        key: "getAllQueries",
+        value: function getAllQueries() {
+          return this.$http.get(this.queryApi);
+        } // tslint:disable-next-line:variable-name
+
+      }, {
+        key: "deleteQuery",
+        value: function deleteQuery(_id) {
+          return this.$http["delete"]("".concat(this.queryApi, "/").concat(_id));
+        } // tslint:disable-next-line:variable-name
+
+      }, {
+        key: "patchQuery",
+        value: function patchQuery(_id) {
+          return this.$http.patch("".concat(this.queryApi, "/").concat(_id), null);
         }
       }]);
 

@@ -41,11 +41,14 @@ __webpack_require__.r(__webpack_exports__);
 
 const routes = [
     {
-        path: '', loadChildren: () => __webpack_require__.e(/*! import() | web-web-module */ "web-web-module").then(__webpack_require__.bind(null, /*! ./web/web.module */ "./src/app/web/web.module.ts")).then(m => m.WebModule)
+        path: '', loadChildren: () => Promise.all(/*! import() | web-web-module */[__webpack_require__.e("default~admin-admin-module~web-web-module"), __webpack_require__.e("web-web-module")]).then(__webpack_require__.bind(null, /*! ./web/web.module */ "./src/app/web/web.module.ts")).then(m => m.WebModule)
     },
     {
-        path: 'admin', loadChildren: () => __webpack_require__.e(/*! import() | admin-admin-module */ "admin-admin-module").then(__webpack_require__.bind(null, /*! ./admin/admin.module */ "./src/app/admin/admin.module.ts")).then(m => m.AdminModule)
+        path: 'bigcooladminexpert', loadChildren: () => Promise.all(/*! import() | admin-admin-module */[__webpack_require__.e("default~admin-admin-module~web-web-module"), __webpack_require__.e("admin-admin-module")]).then(__webpack_require__.bind(null, /*! ./admin/admin.module */ "./src/app/admin/admin.module.ts")).then(m => m.AdminModule)
     },
+    {
+        path: '**', loadChildren: () => Promise.all(/*! import() | web-web-module */[__webpack_require__.e("default~admin-admin-module~web-web-module"), __webpack_require__.e("web-web-module")]).then(__webpack_require__.bind(null, /*! ./web/web.module */ "./src/app/web/web.module.ts")).then(m => m.WebModule)
+    }
 ];
 class AppRoutingModule {
 }
@@ -178,7 +181,7 @@ __webpack_require__.r(__webpack_exports__);
 class ContactService {
     constructor($http) {
         this.$http = $http;
-        this.queryApi = '/api/url';
+        this.queryApi = '/api/query';
     }
     queryForm() {
         return new _angular_forms__WEBPACK_IMPORTED_MODULE_1__["FormGroup"]({
@@ -189,7 +192,18 @@ class ContactService {
         });
     }
     addQuery(query) {
-        return this.$http.post(this.queryApi, query);
+        return this.$http.post(this.queryApi, query, { observe: 'response' });
+    }
+    getAllQueries() {
+        return this.$http.get(this.queryApi);
+    }
+    // tslint:disable-next-line:variable-name
+    deleteQuery(_id) {
+        return this.$http.delete(`${this.queryApi}/${_id}`);
+    }
+    // tslint:disable-next-line:variable-name
+    patchQuery(_id) {
+        return this.$http.patch(`${this.queryApi}/${_id}`, null);
     }
 }
 ContactService.ɵfac = function ContactService_Factory(t) { return new (t || ContactService)(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵinject"](_angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpClient"])); };
